@@ -83,6 +83,7 @@ module RedminePostgresqlSearch
             end
           end
           fulltext_index.update_index!
+          Rails.logger.info("added index for #{id} (#{self.class.name})")
         end
       end
     end

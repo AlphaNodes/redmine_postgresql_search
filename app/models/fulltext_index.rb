@@ -11,23 +11,22 @@ class FulltextIndex < ActiveRecord::Base
   scope :search, ->(q) { where 'to_tsquery(:config, :query) @@ tsv', config: SEARCH_CONFIG, query: q }
 
   def update_index!
-    values = []
+    values_sql = []
     weights = []
 
     unless destroyed?
-      searchable.index_data.each do |weight, value|
+      searchable.index_data.each do |weight, field_proc|
         weight = weight.to_s.upcase
         raise "illegal weight key #{weight}" unless WEIGHTS.include?(weight)
-        next if value.blank?
-
-        values << self.class.connection.quote(value)
+        value_sql = "'#{field_proc.call(searchable.id)}'"
+        values_sql << value_sql
         weights << self.class.connection.quote(weight)
       end
     end
 
-    values_sql = "Array[#{values.join(', ')}]::text[]"
-    weights_sql = "Array[#{weights.join(', ')}]::char[]"
-
-    self.class.connection.execute("SELECT update_search_data('#{SEARCH_CONFIG}', '#{WORD_CONFIG}', #{id}, #{values_sql}, #{weights_sql})")
+    values_sql_array = "Array[#{values_sql.join(', ')}]::text[]"
+    weights_sql_array = "Array[#{weights.join(', ')}]::char[]"
+    sql = "SELECT update_search_data('#{SEARCH_CONFIG}', '#{WORD_CONFIG}', #{id}, #{values_sql_array}, #{weights_sql_array})"
+    self.class.connection.execute(sql)
   end
 end

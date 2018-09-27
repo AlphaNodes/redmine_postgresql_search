@@ -31,7 +31,7 @@ module RedminePostgresqlSearch
                      last_modification_field: "#{News.table_name}.created_on"
 
     setup_searchable WikiPage,
-                     mapping: { a: :title, b: -> { content.text if content.present? } },
+                     mapping: { a: :title, b: -> (id) { WikiPage.where(id: id).select(:text).joins(:content).to_sql } },
                      last_modification_field: "#{WikiContent.table_name}.updated_on"
 
     # Searchables that depend on another Searchable and cannot be searched separately.
@@ -45,7 +45,8 @@ module RedminePostgresqlSearch
                      mapping: { b: :value }
 
     setup_searchable Journal,
-                     mapping: { b: :notes, c: -> { journalized.subject if journalized.is_a?(Issue) } }
+                     if: -> { journalized.is_a?(Issue) },
+                     mapping: { b: :notes, c: -> (id) { Journal.where(id: id).select(:subject).joins(:issue).to_sql } }
 
     load 'redmine_postgresql_search/test_support.rb' if Rails.env.test?
   end
@@ -65,6 +66,8 @@ module RedminePostgresqlSearch
   end
 
   def self.rebuild_indices
+
+    ActiveRecord::Base.connection.execute("TRUNCATE fulltext_words RESTART IDENTITY")
     @searchables.each(&:rebuild_index)
   end
 
@@ -81,10 +84,21 @@ module RedminePostgresqlSearch
           true
         end
       end
+
       after_commit :update_fulltext_index
 
+      mapping = options[:mapping]
+
       define_method :index_data do
-        Tokenizer.new(self, options[:mapping]).index_data
+        mapping.map do |weight, field|
+        field_proc =
+          if field.is_a?(Proc)
+            field
+          else
+            -> (id) { clazz.where(id: id).select(field).to_sql }
+          end
+        [weight, field_proc]
+        end.to_h
       end
 
       last_modification_field = options[:last_modification_field].presence || clazz.table_name + '.updated_on'

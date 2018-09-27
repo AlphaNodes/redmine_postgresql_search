@@ -5,14 +5,6 @@ module RedminePostgresqlSearch
       @mapping = mapping
     end
 
-    def index_data
-      {}.tap do |data|
-        @mapping.each do |weight, fields|
-          data[weight] = get_value_for_fields fields
-        end
-      end
-    end
-
     def self.normalize_string(string)
       string.to_s.gsub(/[^[:alnum:]]+/, ' ')
     end
@@ -31,20 +23,6 @@ module RedminePostgresqlSearch
       Array(tokens).map do |token|
         token.to_s.split(/[^[:alnum:]\*]+/).select { |w| w.present? && w.length > 1 }
       end.flatten.uniq
-    end
-
-    private
-
-    def get_value_for_fields(fields)
-      Array(fields).map do |f|
-        self.class.normalize_string(
-          if f.respond_to?(:call)
-            @record.instance_exec(&f)
-          else
-            @record.send(f)
-          end
-        )
-      end.join ' '
     end
   end
 end

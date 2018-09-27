@@ -156,17 +156,17 @@ class SearchControllerTest < Redmine::ControllerTest
 
   def test_search_without_attachments
     Issue.generate! subject: 'search_attachments'
-    Attachment.generate! container: Issue.find(1), filename: 'search_attachments.patch'
-    get :index, params: { id: 1, q: 'search_attachments', attachments: '0' }
+    Attachment.generate! container: Issue.find(1), filename: 'searchattachment'
+    get :index, params: { id: 1, q: 'searchattachment', attachments: '0' }
     assert_response :success
     assert_select '#search-results'
   end
 
   def test_search_attachments_only
     Issue.generate! subject: 'search_attachments'
-    Attachment.generate! container: Issue.find(1), filename: 'search_attachments.patch'
+    Attachment.generate! container: Issue.find(1), filename: 'searchattachment'
 
-    get :index, params: { id: 1, q: 'search_attachments', attachments: 'only' }
+    get :index, params: { id: 1, q: 'searchattachment', attachments: 'only' }
     assert_response :success
 
     assert_select '#search-results' do
@@ -178,7 +178,7 @@ class SearchControllerTest < Redmine::ControllerTest
   def test_search_with_attachments
     Attachment.generate! container: Issue.find(1), filename: 'search_attachments.patch'
 
-    get :index, params: { id: 1, q: 'search_attachments', attachments: '1' }
+    get :index, params: { id: 1, q: 'search_attachments.patch', attachments: '1' }
     assert_response :success
   end
 

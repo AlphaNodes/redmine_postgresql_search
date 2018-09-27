@@ -1,3 +1,5 @@
+DROP FUNCTION IF EXISTS update_search_data(regconfig,regconfig,integer,text[],character[]) CASCADE;
+
 CREATE OR REPLACE FUNCTION extract_words (text text, word_config regconfig)
     RETURNS SETOF text
     LANGUAGE plpgsql STABLE
@@ -7,7 +9,8 @@ BEGIN
     SELECT
         word
     FROM
-        ts_stat(format('SELECT to_tsvector(%s, %s) ', quote_literal(word_config), quote_literal(text)))
+        -- allow alphanumeric characters and dots, everything else is replaced by whitespace
+        ts_stat(format('SELECT to_tsvector(%s, %s) ', quote_literal(word_config), quote_literal(regexp_replace(text, '[^[:alnum:]].', ' ', 'g'))))
     WHERE
         length(word) > 4;
 END;
@@ -96,20 +99,26 @@ BEGIN
 END;
 $f$;
 
-CREATE OR REPLACE FUNCTION update_search_data (search_config regconfig, word_config regconfig, index_id integer, texts text [ ], weights char [ ])
+CREATE OR REPLACE FUNCTION update_search_data (search_config regconfig, word_config regconfig, index_id integer, texts_sql text [ ], weights char [ ])
     RETURNS void
     LANGUAGE plpgsql
 AS $f$
 DECLARE
     previous_words text [ ];
     current_words text [ ];
+    texts text [ ];
+    sql text;
+    txt text;
 BEGIN
+    FOR sql IN SELECT unnest(texts_sql) LOOP
+        EXECUTE sql INTO txt;
+        texts := array_append(texts, coalesce(txt, ''));
+    END LOOP;
+
     UPDATE
         fulltext_indices
     SET
-        tsv = texts_to_tsvector (search_config,
-            texts,
-            weights)
+        tsv = texts_to_tsvector (search_config, texts, weights)
     WHERE
         id = index_id;
     SELECT
