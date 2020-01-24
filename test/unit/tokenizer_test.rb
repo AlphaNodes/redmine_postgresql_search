@@ -15,8 +15,8 @@ class TokenizerTest < RedminePostgresqlSearchTest
                                                d: [-> { 'foo' }, :other_field])
     assert d = t.index_data
     assert_equal 'This is the title', d[:a]
-    assert_equal 'description text some strange filename pdf', d[:b]
+    assert_equal 'description text some_strange/filename.pdf', d[:b]
     assert_equal 'foo', d[:c]
-    assert_equal 'foo some strange filename pdf', d[:d]
+    assert_equal 'foo some_strange/filename.pdf', d[:d]
   end
 end

@@ -27,7 +27,7 @@ module RedminePostgresqlSearch
           if force_regular_search? token
             token
           else
-            token.to_s.split(/(?:[?!:,;\-\/\\\s.])(?!\w)|\s|['"]/).select { |w| w.present? && w.length > 1 }
+            token.to_s.split(%r{(?:[?!:,;\-\/\\\s.])(?!\w)|\s|['"]}).select { |w| w.present? && w.length > 1 }
           end
         end
 
@@ -52,7 +52,7 @@ module RedminePostgresqlSearch
     private
 
     def normalize_string(string)
-      string.to_s.gsub(/(?:[?!:,;\-\/\\\s.])(?!\w)|\s|['"]/, ' ')
+      string.to_s.gsub(%r{(?:[?!:,;\-\/\\\s.])(?!\w)|\s|['"]}, ' ')
     end
 
     def get_value_for_fields(fields)
