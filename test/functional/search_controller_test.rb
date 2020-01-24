@@ -163,7 +163,7 @@ class SearchControllerTest < Redmine::ControllerTest
     Issue.generate! subject: 'search_attachments'
     Attachment.generate! container: Issue.find(1), filename: 'search_attachments.patch'
 
-    get :index, params: { id: 1, q: 'search_attachments', attachments: 'only' }
+    get :index, params: { id: 1, q: 'search_attachments.patch', attachments: 'only' }
     assert_response :success
 
     assert_select '#search-results' do

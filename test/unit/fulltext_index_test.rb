@@ -75,7 +75,7 @@ class FulltextIndexTest < RedminePostgresqlSearchTest
   test 'should index attachments' do
     i = Issue.generate! subject: 'search attachments'
     a = Attachment.generate! container: i, filename: 'findme.pdf'
-    assert r = FulltextIndex.search('findme')
+    assert r = FulltextIndex.search('findme.pdf')
     assert_equal 1, r.size
     assert_equal a, r.first.searchable
   end
