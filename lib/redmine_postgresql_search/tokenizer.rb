@@ -18,6 +18,10 @@ module RedminePostgresqlSearch
 
         # allow ip address search
         @force_regular_search = true if token =~ /\b\d{1,3}\.\d{1,3}\.\d{1,3}\./
+        # allow mac address search
+        @force_regular_search = true if token =~ /([0-9A-Fa-f]{2}[:-]){4}([0-9A-Fa-f]{2})/
+        # allow mail like search
+        @force_regular_search = true if token =~ /[[:alnum:]._-]+@[[:alnum:].-]+/
 
         @force_regular_search
       end
