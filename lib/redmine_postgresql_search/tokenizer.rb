@@ -1,6 +1,6 @@
 module RedminePostgresqlSearch
   class Tokenizer
-    ALLOW_FOR_EXACT_SEARCH = '\@|\-|\.|\#|\%'.freeze
+    ALLOW_FOR_EXACT_SEARCH = '\@|_|\-|\.|\#|\%'.freeze
 
     class << self
       # extract tokens from the question
