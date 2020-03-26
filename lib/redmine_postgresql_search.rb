@@ -11,6 +11,8 @@ module RedminePostgresqlSearch
         prepend RedminePostgresqlSearch::Patches::Fetcher
       end
 
+      SearchController.send(:helper, PostgresqlSearchHelper)
+
       @searchables = []
 
       setup_searchable Changeset,

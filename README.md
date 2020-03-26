@@ -1,4 +1,5 @@
-Redmine PostgreSQL Search [![Build Status](https://travis-ci.org/AlphaNodes/redmine_postgresql_search.svg?branch=master)](https://travis-ci.org/AlphaNodes/redmine_postgresql_search)
+Redmine PostgreSQL Search [![Build Status](https://travis-ci.org/AlphaNodes/redmine_postgresql_search.svg?branch=master)](https://travis-ci.org/AlphaNodes/redmine_postgresql_search) ![Run RuboCop](https://github.com/AlphaNodes/redmine_postgresql_search/workflows/Run%20RuboCop/badge.svg)
+
 =========================
 
 Makes Redmine search use PostgreSQL full text search instead of LIKE queries.
