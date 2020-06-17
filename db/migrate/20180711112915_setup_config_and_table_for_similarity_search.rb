@@ -7,7 +7,7 @@ class SetupConfigAndTableForSimilaritySearch < ActiveRecord::Migration[4.2]
 
     drop_table :fulltext_words, if_exists: true
     add_column :fulltext_indices, :words, :string, array: true
-    execute %{CREATE TABLE fulltext_words (word text, ndoc integer)}
+    execute %{CREATE TABLE fulltext_words (word text NOT NULL UNIQUE, ndoc integer)}
 
     execute <<-SQL
       CREATE TEXT SEARCH DICTIONARY #{config_name} (

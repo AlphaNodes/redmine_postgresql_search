@@ -47,9 +47,9 @@ module RedminePostgresqlSearch
             s_token
           else
             parts = if exact_search_token?(token)
-                      s_token.split(/[^([:alnum:]\*|#{Tokenizer::ALLOW_FOR_EXACT_SEARCH})]+/)
+                      s_token.split(/[^([:alnum:]*|#{Tokenizer::ALLOW_FOR_EXACT_SEARCH})]+/)
                     else
-                      s_token.split(/[^[:alnum:]\*]+/)
+                      s_token.split(/[^[:alnum:]*]+/)
                     end
 
             parts.select! { |w| w.present? && w.length > 1 }

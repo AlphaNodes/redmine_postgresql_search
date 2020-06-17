@@ -20,7 +20,7 @@ AS $f$
 BEGIN
     INSERT INTO fulltext_words
     SELECT
-        unnest(words), 1 ON CONFLICT (word)
+        unnest(words), 1 ON CONFLICT ON CONSTRAINT fulltext_words_word_key
         DO
         UPDATE
         SET
