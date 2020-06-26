@@ -63,6 +63,10 @@ module RedminePostgresqlSearch
       @searchables.each(&:rebuild_index)
     end
 
+    def update_indices
+      @searchables.each(&:update_index)
+    end
+
     private
 
     def setup_searchable(clazz, options = {})
