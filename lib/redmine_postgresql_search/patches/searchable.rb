@@ -14,6 +14,15 @@ module RedminePostgresqlSearch
           raise e
         end
 
+        def update_index
+          find_in_batches.each do |group|
+            group.each(&:update_fulltext_index)
+          end
+        rescue StandardError => e
+          logger.error("update index failed for searchable type #{name}")
+          raise e
+        end
+
         # Build search queries for searchable type.
         # Can return multiple queries when journals, attachments and custom fields are searched, too.
         # The queries expect a CTE called 'fts' which returns a searchable_type and a searchable_id.
