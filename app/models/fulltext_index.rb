@@ -18,7 +18,7 @@ class FulltextIndex < ActiveRecord::Base
         weight = weight.to_s.upcase
         raise "illegal weight key #{weight}" unless WEIGHTS.include?(weight)
         next if value.blank?
-        next if RedminePostgresqlSearch.settings[:disallow_multibyte_words] && multibyte?(value)
+        next if RedminePostgresqlSearch.setting(:disallow_multibyte_words) && multibyte?(value)
 
         values << self.class.connection.quote(value)
         weights << self.class.connection.quote(weight)
