@@ -97,7 +97,7 @@ module RedminePostgresqlSearch
           Tokenizer.new(self, options[:mapping]).index_data
         end
 
-        last_modification_field = options[:last_modification_field].presence || clazz.table_name + '.updated_on'
+        last_modification_field = options[:last_modification_field].presence || "#{clazz.table_name}.updated_on"
 
         define_singleton_method :last_modification_field do
           last_modification_field

@@ -13,7 +13,7 @@ class SetupTsearch < ActiveRecord::Migration[4.2]
     enable_extension 'unaccent'
     language = ENV['language'] || 'english'
     config_name = FulltextIndex::SEARCH_CONFIG
-    execute <<-SQL
+    execute <<-SQL.squish
       CREATE TEXT SEARCH DICTIONARY #{config_name} ( TEMPLATE = snowball, Language = #{language}, StopWords = #{language} );
       CREATE TEXT SEARCH CONFIGURATION #{config_name} (COPY = '#{language}');
       ALTER TEXT SEARCH CONFIGURATION #{config_name} ALTER MAPPING FOR hword, hword_part, word with unaccent, #{config_name};
@@ -22,7 +22,7 @@ class SetupTsearch < ActiveRecord::Migration[4.2]
 
   def down
     config_name = FulltextIndex::SEARCH_CONFIG
-    execute <<-SQL
+    execute <<-SQL.squish
       DROP TEXT SEARCH CONFIGURATION IF EXISTS #{config_name};
       DROP TEXT SEARCH DICTIONARY IF EXISTS #{config_name};
     SQL

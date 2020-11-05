@@ -9,7 +9,7 @@ class SetupConfigAndTableForSimilaritySearch < ActiveRecord::Migration[4.2]
     add_column :fulltext_indices, :words, :string, array: true
     execute %{CREATE TABLE fulltext_words (word text NOT NULL UNIQUE, ndoc integer)}
 
-    execute <<-SQL
+    execute <<-SQL.squish
       CREATE TEXT SEARCH DICTIONARY #{config_name} (
           TEMPLATE = simple,
           stopwords = #{language}
@@ -41,7 +41,7 @@ class SetupConfigAndTableForSimilaritySearch < ActiveRecord::Migration[4.2]
   def down
     config_name = FulltextIndex::WORD_CONFIG
 
-    execute <<-SQL
+    execute <<-SQL.squish
       DROP TEXT SEARCH CONFIGURATION IF EXISTS #{config_name};
 
       DROP TEXT SEARCH DICTIONARY IF EXISTS #{config_name};

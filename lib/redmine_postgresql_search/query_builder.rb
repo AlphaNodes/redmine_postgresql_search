@@ -10,7 +10,7 @@ module RedminePostgresqlSearch
 
       # create additional search tokens by querying a word table for fuzzy matches
       # the <% operator selects words with at least 60% word similarity (see PostgreSQL's pg_trgm docs)
-      sql = 'SELECT word FROM fulltext_words WHERE ' + @tokens.map { |t| "'#{t}' <% word" }.join(' OR ')
+      sql = "SELECT word FROM fulltext_words WHERE #{@tokens.map { |t| "'#{t}' <% word" }.join(' OR ')}"
       @fuzzy_matches = ActiveRecord::Base.connection.execute(sql).field_values('word')
     end
 
@@ -25,14 +25,14 @@ module RedminePostgresqlSearch
             "#{ts_rank} AS score",
             "FROM (#{union_sql}) q",
             'ORDER BY scope, id, score DESC'].join("\n")
-      sql = [fts_cte,
-             'SELECT scope, id',
-             'FROM (',
-             sq,
-             ') q2',
-             'ORDER BY q2.score DESC',
-             limit_sql].compact.join("\n")
-      sql
+
+      [fts_cte,
+       'SELECT scope, id',
+       'FROM (',
+       sq,
+       ') q2',
+       'ORDER BY q2.score DESC',
+       limit_sql].compact.join("\n")
     end
 
     protected
@@ -53,7 +53,7 @@ module RedminePostgresqlSearch
     def ts_query
       FulltextIndex.send :sanitize_sql_array, [
         'to_tsquery(:config, :query) query',
-        config: FulltextIndex::SEARCH_CONFIG, query: search_query
+        { config: FulltextIndex::SEARCH_CONFIG, query: search_query }
       ]
     end
 
@@ -90,7 +90,7 @@ module RedminePostgresqlSearch
     def ranking_ts_query
       FulltextIndex.send :sanitize_sql_array, [
         'to_tsquery(:config, :query)',
-        config: FulltextIndex::SEARCH_CONFIG, query: ranking_query
+        { config: FulltextIndex::SEARCH_CONFIG, query: ranking_query }
       ]
     end
 

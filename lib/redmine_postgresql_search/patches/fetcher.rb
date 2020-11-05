@@ -50,8 +50,8 @@ module RedminePostgresqlSearch
         # This means that other results will be ranked lower than all fts results.
         @scope = @scopes_without_postgresql_search
         other_matches = super
-        results = pg_matches + other_matches
-        results
+
+        pg_matches + other_matches
       end
     end
   end
