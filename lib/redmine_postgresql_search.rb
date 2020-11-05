@@ -61,7 +61,7 @@ module RedminePostgresqlSearch
     end
 
     def setting?(value)
-      Additionals.true?(settings[value])
+      Additionals.true? settings[value]
     end
 
     def rebuild_indices

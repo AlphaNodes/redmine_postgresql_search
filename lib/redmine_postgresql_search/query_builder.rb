@@ -79,8 +79,8 @@ module RedminePostgresqlSearch
       # now - (timestamp in the past or now if null)
       age = 'extract(epoch from age(now(), coalesce(updated_on, now())))'
       day_seconds = 60 * 60 * 24
-      age_weight_lifetime = RedminePostgresqlSearch.settings[:age_weight_lifetime] || 365
-      age_weight_min = RedminePostgresqlSearch.settings[:age_weight_min] || 0.1
+      age_weight_lifetime = RedminePostgresqlSearch.setting(:age_weight_lifetime) || 365
+      age_weight_min = RedminePostgresqlSearch.setting(:age_weight_min) || 0.1
       # ts_rank can be zero if fuzzy matching is used. Add a little constant to avoid nulling the rank.
       "(0.01 + ts_rank(tsv, #{ranking_ts_query}, 1|32)) *" \
       " greatest(exp(-#{age} / #{day_seconds} / #{age_weight_lifetime}), #{age_weight_min})"
