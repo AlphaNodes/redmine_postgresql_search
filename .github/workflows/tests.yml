@@ -36,7 +36,7 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
         ports:
-          - 5433/tcp
+          - 5432:5433
 
         options: >-
           --health-cmd pg_isready
@@ -104,7 +104,6 @@ jobs:
       - name: Run Redmine rake tasks
         env:
           RAILS_ENV: test
-          POSTGRES_PORT: ${{ job.services.postgres13.ports[5433] }}
         working-directory: redmine
         run: |
           bundle exec rake generate_secret_token
@@ -114,7 +113,7 @@ jobs:
         env:
           RAILS_ENV: test
           REDMINE_VERSION: ${{ matrix.redmine }}
-          POSTGRES_PORT: ${{ job.services.postgres13.ports[5433] }}
+          POSTGRES_HOST: ${{ job.services.postgres13.ports[5433] }}
         working-directory: redmine
         run: bundle exec rake redmine:plugins:test NAME=redmine_postgresql_search RUBYOPT="-W0"
 
@@ -122,7 +121,6 @@ jobs:
         env:
           RAILS_ENV: test
           REDMINE_VERSION: ${{ matrix.redmine }}
-          POSTGRES_PORT: ${{ job.services.postgres13.ports[5433] }}
         working-directory: redmine
         run: bundle exec rake redmine_postgresql_search:rebuild_index
 
@@ -130,6 +128,5 @@ jobs:
         env:
           RAILS_ENV: test
           REDMINE_VERSION: ${{ matrix.redmine }}
-          POSTGRES_PORT: ${{ job.services.postgres13.ports[5433] }}
         working-directory: redmine
         run: bundle exec rake redmine:plugins:migrate NAME=redmine_postgresql_search VERSION=0

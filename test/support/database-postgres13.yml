@@ -1,26 +1,26 @@
 production:
   adapter: postgresql
-  host: postgres13
+  host: localhost
   database: redmine
   username: postgres
   password: postgres
   encoding: utf8
-  port: <%= ENV['POSTGRES_PORT'] %>
+  port: 5433
 
 development:
   adapter: postgresql
-  host: postgres13
+  host: localhost
   database: redmine
   username: postgres
   password: postgres
   encoding: utf8
-  port: <%= ENV['POSTGRES_PORT'] %>
+  port: 5433
 
 test:
   adapter: postgresql
-  host: postgres13
+  host: localhost
   database: redmine
   username: postgres
   password: postgres
   encoding: utf8
-  port: <%= ENV['POSTGRES_PORT'] %>
+  port: 5433
