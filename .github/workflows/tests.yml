@@ -91,7 +91,6 @@ jobs:
         run: |
           sed -i '/rubocop/d' Gemfile
           rm -f .rubocop*
-          cp plugins/redmine_postgresql_search/test/support/Gemfile.local Gemfile.local
           cp plugins/redmine_postgresql_search/test/support/database.yml config/database.yml
           cp plugins/redmine_postgresql_search/test/support/configuration.yml config/configuration.yml
 
