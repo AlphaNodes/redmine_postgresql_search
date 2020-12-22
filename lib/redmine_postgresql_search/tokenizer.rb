@@ -47,7 +47,7 @@ module RedminePostgresqlSearch
             s_token
           else
             parts = if exact_search_token?(token)
-                      s_token.split(/[^([:alnum:]*|#{Tokenizer::ALLOW_FOR_EXACT_SEARCH})]+/)
+                      s_token.split(/[^([:alnum:]*|#{Tokenizer::ALLOW_FOR_EXACT_SEARCH})]+/o)
                     else
                       s_token.split(/[^[:alnum:]*]+/)
                     end
@@ -79,7 +79,7 @@ module RedminePostgresqlSearch
     private
 
     def normalize_string(string)
-      self.class.search_token(string).gsub(/[^([:alnum:]|#{Tokenizer::ALLOW_FOR_EXACT_SEARCH})]+/, ' ')
+      self.class.search_token(string).gsub(/[^([:alnum:]|#{Tokenizer::ALLOW_FOR_EXACT_SEARCH})]+/o, ' ')
     end
 
     def get_value_for_fields(fields)

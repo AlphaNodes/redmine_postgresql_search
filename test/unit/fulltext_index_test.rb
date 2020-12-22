@@ -90,7 +90,7 @@ class FulltextIndexTest < RedminePostgresqlSearchTest
   end
 
   def create_issue(attributes = {})
-    Issue.create({ project_id: @project.id,
+    Issue.create({ project_id: @project,
                    tracker_id: 1, author_id: 1,
                    status_id: 1, priority: IssuePriority.first,
                    subject: 'Issue 1' }.merge(attributes))

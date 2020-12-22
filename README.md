@@ -1,12 +1,10 @@
 Redmine PostgreSQL Search
 =========================
 
-[![Build Status](https://travis-ci.org/AlphaNodes/redmine_postgresql_search.svg?branch=master)](https://travis-ci.org/AlphaNodes/redmine_postgresql_search) ![Run RuboCop](https://github.com/AlphaNodes/redmine_postgresql_search/workflows/Run%20RuboCop/badge.svg)
+[![Run Tests](https://github.com/AlphaNodes/redmine_postgresql_search/workflows/Tests/badge.svg)](https://github.com/AlphaNodes/redmine_postgresql_search/actions?query=workflow%3ATests) [![Run Linters](https://github.com/AlphaNodes/redmine_postgresql_search/workflows/Run%20Linters/badge.svg)](https://github.com/AlphaNodes/redmine_postgresql_search/actions?query=workflow%3A%22Run+Linters%22)
 
 Makes Redmine search use PostgreSQL full text search instead of LIKE queries.
-PostgreSQL 9.6 or above is required.
-
-http://redmine-search.com/
+PostgreSQL 12 or above is required.
 
 Installation
 ------------
@@ -21,7 +19,7 @@ twist for Redmine installations with mostly non-english content:
 _Before_ running the plugin migrations, set the `language` environment variable
 to the language your Redmine content (mostly) is in. The `setup_tsearch`
 migration uses this to create a matching [text search
-configuration](http://www.postgresql.org/docs/current/static/textsearch-intro.html#TEXTSEARCH-INTRO-CONFIGURATIONS)
+configuration](https://www.postgresql.org/docs/current/static/textsearch-intro.html#TEXTSEARCH-INTRO-CONFIGURATIONS)
 in your Redmine database.  This directly influences search results quality so
 don't just skip this (unless your language would be english, this is the
 default used by the migration).
@@ -64,8 +62,8 @@ After running the migrations, make sure to index all your existing content by ru
 In case you want to learn more about the internals of PostgreSQL full text
 search - I found these two articles quite helpful:
 
-- http://shisaa.jp/postset/postgresql-full-text-search-part-2.html
-- http://linuxgazette.net/164/sephton.html
+- https://www.compose.com/articles/mastering-postgresql-tools-full-text-search-and-phrase-search/
+- https://linuxgazette.net/164/sephton.html
 
 ### Extensions
 
@@ -76,11 +74,6 @@ application's database user. To get around this, set up the extensions manually
 account and re-run the plugin migrations.
 On Ubuntu/Debian the extensions are part of the `postgresql-contrib` package.
 
-Known Issues
-------------
-
-Please report any issues not mentioned here [on
-Github](https://github.com/AlphaNodes/redmine_postgresql_search/issues).
 
 ### Result Completeness
 
@@ -96,7 +89,7 @@ License
 -------
 
 Copyright (C) 2015 [Jens Krämer](https://jkraemer.net)
-Copyright (C) 2018 [AlphaNodes GmbH](https://alphanodes.com)
+Copyright (C) 2018-2020 [AlphaNodes GmbH](https://alphanodes.com)
 
 The Postgresql Search plugin for Redmine is free software: you can redistribute
 it and/or modify it under the terms of the GNU General Public License as
