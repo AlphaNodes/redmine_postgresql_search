@@ -1,6 +1,6 @@
 production:
   adapter: postgresql
-  host: localhost
+  host: postgres
   database: redmine
   username: postgres
   password: postgres
@@ -9,7 +9,7 @@ production:
 
 development:
   adapter: postgresql
-  host: localhost
+  host: postgres
   database: redmine
   username: postgres
   password: postgres
@@ -18,7 +18,7 @@ development:
 
 test:
   adapter: postgresql
-  host: localhost
+  host: postgres
   database: redmine
   username: postgres
   password: postgres
