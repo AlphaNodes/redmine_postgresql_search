@@ -35,7 +35,6 @@ jobs:
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-          POSTGRES_PORT: 5433
         ports:
           - 5433:5433
 
@@ -95,7 +94,7 @@ jobs:
         working-directory: redmine
         run: |
           cp plugins/redmine_postgresql_search/test/support/database-${{ matrix.db }}.yml config/database.yml
-          cp plugins/redmine_postgresql_search/test/support/configuration.yml config/configuration.yml
+          cp plugins/redmine_postgresql_search/test/support/additional_environment.rb config/additional_environment.rb
 
       - name: Install Ruby dependencies
         working-directory: redmine
@@ -105,16 +104,17 @@ jobs:
       - name: Run Redmine rake tasks
         env:
           RAILS_ENV: test
+          POSTGRES_PORT: ${{ job.services.postgres13.ports[5433] }}
         working-directory: redmine
         run: |
           bundle exec rake generate_secret_token
           bundle exec rake db:create db:migrate redmine:plugins:migrate
-          bundle exec rake db:test:prepare
 
       - name: Run tests
         env:
           RAILS_ENV: test
           REDMINE_VERSION: ${{ matrix.redmine }}
+          POSTGRES_PORT: ${{ job.services.postgres13.ports[5433] }}
         working-directory: redmine
         run: bundle exec rake redmine:plugins:test NAME=redmine_postgresql_search RUBYOPT="-W0"
 
@@ -122,6 +122,7 @@ jobs:
         env:
           RAILS_ENV: test
           REDMINE_VERSION: ${{ matrix.redmine }}
+          POSTGRES_PORT: ${{ job.services.postgres13.ports[5433] }}
         working-directory: redmine
         run: bundle exec rake redmine_postgresql_search:rebuild_index
 
@@ -129,5 +130,6 @@ jobs:
         env:
           RAILS_ENV: test
           REDMINE_VERSION: ${{ matrix.redmine }}
+          POSTGRES_PORT: ${{ job.services.postgres13.ports[5433] }}
         working-directory: redmine
         run: bundle exec rake redmine:plugins:migrate NAME=redmine_postgresql_search VERSION=0
