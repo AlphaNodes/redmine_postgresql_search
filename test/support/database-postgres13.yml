@@ -5,7 +5,7 @@ production:
   username: postgres
   password: postgres
   encoding: utf8
-  port: 5433
+  port: <%= ENV['POSTGRES_PORT'] %>
 
 development:
   adapter: postgresql
@@ -14,7 +14,7 @@ development:
   username: postgres
   password: postgres
   encoding: utf8
-  port: 5433
+  port: <%= ENV['POSTGRES_PORT'] %>
 
 test:
   adapter: postgresql
@@ -23,4 +23,4 @@ test:
   username: postgres
   password: postgres
   encoding: utf8
-  port: 5433
+  port: <%= ENV['POSTGRES_PORT'] %>
