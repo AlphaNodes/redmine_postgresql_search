@@ -5,7 +5,6 @@ production:
   username: postgres
   password: postgres
   encoding: utf8
-  port: 5432
 
 development:
   adapter: postgresql
@@ -14,7 +13,6 @@ development:
   username: postgres
   password: postgres
   encoding: utf8
-  port: 5432
 
 test:
   adapter: postgresql
@@ -23,4 +21,3 @@ test:
   username: postgres
   password: postgres
   encoding: utf8
-  port: 5432
