@@ -12,32 +12,16 @@ jobs:
       matrix:
         ruby: ['2.6', '2.4']
         redmine: ['4.1-stable', 'master']
-        db: ['postgres12', 'postgres13']
       fail-fast: false
 
     services:
-      postgres12:
-        image: postgres:12
+      postgres:
+        image: postgres:13
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
         ports:
           - 5432:5432
-
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
-      postgres13:
-        image: postgres:13
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_PORT: 5433
-        ports:
-          - 5433:5433
 
         options: >-
           --health-cmd pg_isready
@@ -94,7 +78,7 @@ jobs:
       - name: Prepare Redmine source
         working-directory: redmine
         run: |
-          cp plugins/redmine_postgresql_search/test/support/database-${{ matrix.db }}.yml config/database.yml
+          cp plugins/redmine_postgresql_search/test/support/database.yml config/database.yml
           cp plugins/redmine_postgresql_search/test/support/additional_environment.rb config/additional_environment.rb
 
       - name: Install Ruby dependencies
