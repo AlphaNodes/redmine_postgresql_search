@@ -1,5 +1,5 @@
 .info
-  = raw l(:postgresql_search_age_weight_info)
+  = raw l :postgresql_search_age_weight_info
 
 p
   = label_tag 'settings[age_weight_lifetime]', l(:label_postgresql_search_age_weight_lifetime)
@@ -10,7 +10,7 @@ p
                      step: '1',
                      size: 5,
                      required: true
-  em.info = l(:postgresql_search_age_weight_lifetime_info)
+  em.info = l :postgresql_search_age_weight_lifetime_info
 p
   = label_tag 'settings[age_weight_min]', l(:label_postgresql_search_age_weight_min)
   = number_field_tag 'settings[age_weight_min]',
@@ -20,4 +20,4 @@ p
                      step: '0.05',
                      size: 5,
                      required: true
-  em.info = l(:postgresql_search_age_weight_min_info)
+  em.info = l :postgresql_search_age_weight_min_info

@@ -73,3 +73,6 @@ Style/HashTransformValues:
 
 Naming/VariableNumber:
   Enabled: false
+
+Layout/SpaceBeforeBrackets:
+  Enabled: false
