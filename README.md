@@ -1,7 +1,7 @@
 Redmine PostgreSQL Search
 =========================
 
-[![Run Tests](https://github.com/AlphaNodes/redmine_postgresql_search/workflows/Tests/badge.svg)](https://github.com/AlphaNodes/redmine_postgresql_search/actions?query=workflow%3ATests) [![Run Linters](https://github.com/AlphaNodes/redmine_postgresql_search/workflows/Run%20Linters/badge.svg)](https://github.com/AlphaNodes/redmine_postgresql_search/actions?query=workflow%3A%22Run+Linters%22)
+[![Run Tests](https://github.com/AlphaNodes/redmine_postgresql_search/workflows/Tests/badge.svg)](https://github.com/AlphaNodes/redmine_postgresql_search/actions/workflows/tests.yml) [![Run Linters](https://github.com/AlphaNodes/redmine_postgresql_search/workflows/Run%20Linters/badge.svg)](https://github.com/AlphaNodes/redmine_postgresql_search/actions/workflows/linters.yml)
 
 Makes Redmine search use PostgreSQL full text search instead of LIKE queries.
 PostgreSQL 12 or above is required.
