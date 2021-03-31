@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateFulltextIndices < ActiveRecord::Migration[4.2]
   def up
     drop_table :fulltext_indices, if_exists: true

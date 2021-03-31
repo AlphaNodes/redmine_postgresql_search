@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # PostgreSQL search config creation
 #
 # this sets up a config based on PostgreSQL's stock 'english' configuration and

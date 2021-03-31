@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SetupConfigAndTableForSimilaritySearch < ActiveRecord::Migration[4.2]
   def up
     language = ENV['language'] || 'english'

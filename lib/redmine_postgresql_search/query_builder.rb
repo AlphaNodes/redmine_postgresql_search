@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RedminePostgresqlSearch
   class QueryBuilder
     # !tokens must be safe for a SQL string or you will create a possibility for SQL injection!

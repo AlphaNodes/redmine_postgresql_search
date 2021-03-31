@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module RedminePostgresqlSearch
   class Tokenizer
-    ALLOW_FOR_EXACT_SEARCH = '\@|_|\-|\.|\#|\%'.freeze
+    ALLOW_FOR_EXACT_SEARCH = '\@|_|\-|\.|\#|\%'
 
     class << self
       # extract tokens from the question
@@ -15,7 +17,7 @@ module RedminePostgresqlSearch
 
       def search_token(token)
         token = token.to_s
-        exact_search_token?(token) ? token[1..-1] : token
+        exact_search_token?(token) ? token[1..] : token
       end
 
       def exact_search_token?(token)
@@ -58,7 +60,6 @@ module RedminePostgresqlSearch
         end
 
         rc.flatten!
-        # Rails.logger.debug "debug token result: #{rc.inspect} "
         rc.uniq
       end
     end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddSearchFunctions < ActiveRecord::Migration[4.2]
   include RedminePostgresqlSearch::Migration
 

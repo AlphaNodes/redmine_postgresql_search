@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RemoveProjectIdAndUpdatedOn < ActiveRecord::Migration[4.2]
   def change
     remove_column :fulltext_indices, :updated_on, :datetime

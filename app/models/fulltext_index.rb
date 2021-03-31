@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class FulltextIndex < ActiveRecord::Base
   belongs_to :searchable, polymorphic: true, optional: false
 
@@ -5,8 +7,8 @@ class FulltextIndex < ActiveRecord::Base
   WEIGHTS = %w[A B C D].freeze
 
   # the postgresql indexing config to be used
-  SEARCH_CONFIG = 'redmine_search'.freeze
-  WORD_CONFIG = 'redmine_search_words'.freeze
+  SEARCH_CONFIG = 'redmine_search'
+  WORD_CONFIG = 'redmine_search_words'
 
   scope :search, ->(q) { where 'to_tsquery(:config, :query) @@ tsv', config: SEARCH_CONFIG, query: q }
 

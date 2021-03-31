@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_dependency 'redmine_postgresql_search/tokenizer'
 require_dependency 'redmine_postgresql_search/query_builder'
 

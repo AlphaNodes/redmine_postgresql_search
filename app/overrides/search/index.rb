@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Deface::Override.new virtual_path: 'search/index',
                      name: 'search-index-replace-all-words-label',
                      replace: 'erb[loud]:contains("l(:label_all_words)")',

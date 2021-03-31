@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+raise "\n\033[31maredmine_postgresql_search requires ruby 2.6 or newer. Please update your ruby version.\033[0m" if RUBY_VERSION < '2.6'
+
 Redmine::Plugin.register :redmine_postgresql_search do
   name 'Redmine PostgreSQL Search Plugin'
   url  'https://github.com/alphanodes/redmine_postgresql_search'
@@ -8,7 +12,7 @@ Redmine::Plugin.register :redmine_postgresql_search do
   requires_redmine version_or_higher: '4.1'
 
   begin
-    requires_redmine_plugin :additionals, version_or_higher: '3.0'
+    requires_redmine_plugin :additionals, version_or_higher: '3.0.1'
   rescue Redmine::PluginNotFound
     raise 'Please install additionals plugin (https://github.com/alphanodes/additionals)'
   end

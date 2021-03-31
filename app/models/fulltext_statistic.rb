@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class FulltextStatistic
   class << self
     def indices_count

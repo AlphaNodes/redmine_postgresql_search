@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :redmine_postgresql_search do
   desc 'Reindexes all searchable models (delete/create)'
   task rebuild_index: :environment do
