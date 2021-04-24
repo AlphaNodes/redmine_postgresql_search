@@ -62,7 +62,7 @@ class FulltextIndexTest < RedminePostgresqlSearchTest
     assert_difference 'FulltextIndex.count', 1 do
       assert_difference 'Journal.count', 1 do
         issue.init_journal User.find(1), 'hello from your friendly journal'
-        issue.save
+        issue.reload.save
       end
     end
     assert issue.fulltext_index.present?
