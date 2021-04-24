@@ -24,7 +24,7 @@ class SearchableTest < RedminePostgresqlSearchTest
   setup do
     Setting.default_language = 'en'
     RedminePostgresqlSearch.rebuild_indices
-    @project = Project.find(1)
+    @project = Project.find 1
     @issue = Issue.generate! subject: 'findme test issue', description: 'test foobar'
   end
 

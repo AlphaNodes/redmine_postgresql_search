@@ -21,7 +21,7 @@ Redmine::Plugin.register :redmine_postgresql_search do
 end
 
 begin
-  if ActiveRecord::Base.connection.table_exists?(Setting.table_name)
+  if ActiveRecord::Base.connection.table_exists? Setting.table_name
     Rails.configuration.to_prepare do
       if Redmine::Database.postgresql?
         RedminePostgresqlSearch.setup

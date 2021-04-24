@@ -3,7 +3,7 @@
 module RedminePostgresqlSearch
   class QueryBuilder
     # !tokens must be safe for a SQL string or you will create a possibility for SQL injection!
-    def initialize(tokens, options = {})
+    def initialize(tokens, **options)
       @tokens = tokens
       @titles_only = options[:titles_only]
       @all_words = options[:all_words]

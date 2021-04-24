@@ -18,7 +18,7 @@ class FulltextIndex < ActiveRecord::Base
     unless destroyed?
       searchable.index_data.each do |weight, value|
         weight = weight.to_s.upcase
-        raise "illegal weight key #{weight}" unless WEIGHTS.include?(weight)
+        raise "illegal weight key #{weight}" unless WEIGHTS.include? weight
         next if value.blank?
         next if RedminePostgresqlSearch.setting(:disallow_multibyte_words) && multibyte?(value)
 
@@ -27,10 +27,10 @@ class FulltextIndex < ActiveRecord::Base
       end
     end
 
-    values_sql = "Array[#{values.join(', ')}]::text[]"
-    weights_sql = "Array[#{weights.join(', ')}]::char[]"
+    values_sql = "Array[#{values.join ', '}]::text[]"
+    weights_sql = "Array[#{weights.join ', '}]::char[]"
 
-    self.class.connection.execute("SELECT update_search_data('#{SEARCH_CONFIG}', '#{WORD_CONFIG}', #{id}, #{values_sql}, #{weights_sql})")
+    self.class.connection.execute "SELECT update_search_data('#{SEARCH_CONFIG}', '#{WORD_CONFIG}', #{id}, #{values_sql}, #{weights_sql})"
   end
 
   private

@@ -44,11 +44,11 @@ module RedminePostgresqlSearch
                        mapping: { a: :filename, b: :description }
 
       setup_searchable CustomValue,
-                       if: -> { customized.is_a?(Issue) },
+                       if_condition: -> { customized.is_a? Issue },
                        mapping: { b: :value }
 
       setup_searchable Journal,
-                       mapping: { b: :notes, c: -> { journalized.subject if journalized.is_a?(Issue) } }
+                       mapping: { b: :notes, c: -> { journalized.subject if journalized.is_a? Issue } }
     end
 
     # support with default setting as fall back
@@ -78,11 +78,11 @@ module RedminePostgresqlSearch
       Setting[:plugin_redmine_postgresql_search]
     end
 
-    def setup_searchable(clazz, options = {})
+    def setup_searchable(clazz, mapping:, last_modification_field: nil, if_condition: nil)
       @searchables << clazz
       clazz.class_eval do
         has_one :fulltext_index, as: :searchable, dependent: :delete
-        if (condition = options[:if])
+        if (condition = if_condition)
           define_method :add_to_index? do
             !!instance_exec(&condition) # rubocop:disable Style/DoubleNegation
           end
@@ -94,10 +94,10 @@ module RedminePostgresqlSearch
         after_commit :update_fulltext_index
 
         define_method :index_data do
-          Tokenizer.new(self, options[:mapping]).index_data
+          Tokenizer.new(self, mapping).index_data
         end
 
-        last_modification_field = options[:last_modification_field].presence || "#{clazz.table_name}.updated_on"
+        last_modification_field ||= "#{clazz.table_name}.updated_on"
 
         define_singleton_method :last_modification_field do
           last_modification_field

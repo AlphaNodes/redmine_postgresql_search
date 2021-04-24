@@ -72,22 +72,22 @@ class SearchControllerTest < Redmine::ControllerTest
   end
 
   def test_search_issues_should_search_notes
-    Journal.create!(journalized: Issue.find(2), notes: 'Issue notes with searchkeyword')
+    Journal.create! journalized: Issue.find(2), notes: 'Issue notes with searchkeyword'
 
     get :index, params: { q: 'searchkeyword', issues: 1 }
     assert_response :success
   end
 
   def test_search_issues_with_multiple_matches_in_journals_should_return_issue_once
-    Journal.create!(journalized: Issue.find(2), notes: 'Issue notes with searchkeyword')
-    Journal.create!(journalized: Issue.find(2), notes: 'Issue notes with searchkeyword')
+    Journal.create! journalized: Issue.find(2), notes: 'Issue notes with searchkeyword'
+    Journal.create! journalized: Issue.find(2), notes: 'Issue notes with searchkeyword'
 
     get :index, params: { q: 'searchkeyword', issues: 1 }
     assert_response :success
   end
 
   def test_search_issues_should_search_private_notes_with_permission_only
-    Journal.create!(journalized: Issue.find(2), notes: 'Private notes with searchkeyword', private_notes: true)
+    Journal.create! journalized: Issue.find(2), notes: 'Private notes with searchkeyword', private_notes: true
     @request.session[:user_id] = 2
 
     Role.find(1).add_permission! :view_private_notes

@@ -24,8 +24,8 @@ class FulltextIndexTest < RedminePostgresqlSearchTest
   setup do
     Setting.default_language = 'en'
     RedminePostgresqlSearch.rebuild_indices
-    @project = Project.find(1)
-    @wiki = Wiki.find(1)
+    @project = Project.find 1
+    @wiki = Wiki.find 1
   end
 
   test 'wiki page should create index' do
@@ -36,7 +36,8 @@ class FulltextIndexTest < RedminePostgresqlSearchTest
       end
     end
     assert page.fulltext_index.present?
-    assert r = FulltextIndex.search('some & page & content')
+    r = FulltextIndex.search 'some & page & content'
+    assert r
     assert_equal 1, r.size
     assert_equal page, r.first.searchable
   end
@@ -60,7 +61,7 @@ class FulltextIndexTest < RedminePostgresqlSearchTest
                          description: 'issue description'
     assert_difference 'FulltextIndex.count', 1 do
       assert_difference 'Journal.count', 1 do
-        issue.init_journal(User.find(1), 'hello from your friendly journal')
+        issue.init_journal User.find(1), 'hello from your friendly journal'
         issue.save
       end
     end
@@ -77,7 +78,8 @@ class FulltextIndexTest < RedminePostgresqlSearchTest
   test 'should index attachments' do
     i = Issue.generate! subject: 'search attachments'
     a = Attachment.generate! container: i, filename: 'findme.pdf'
-    assert r = FulltextIndex.search('findme.pdf')
+    r = FulltextIndex.search 'findme.pdf'
+    assert r
     assert_equal 1, r.size
     assert_equal a, r.first.searchable
   end
@@ -86,7 +88,7 @@ class FulltextIndexTest < RedminePostgresqlSearchTest
     text = attributes.delete(:text) || 'lorem ipsum'
     attributes[:wiki] ||= @wiki
     WikiPage.new(attributes).tap do |page|
-      page.content = WikiContent.new(page: page, text: text)
+      page.content = WikiContent.new page: page, text: text
       page.save
     end
   end

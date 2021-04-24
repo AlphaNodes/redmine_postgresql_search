@@ -44,11 +44,11 @@ module RedminePostgresqlSearch
       # TODO: at the moment this breaks phrase search
       def sanitize_query_tokens(tokens)
         rc = Array(tokens).map do |token|
-          s_token = search_token(token)
+          s_token = search_token token
           if force_regular_search? s_token
             s_token
           else
-            parts = if exact_search_token?(token)
+            parts = if exact_search_token? token
                       s_token.split(/[^([:alnum:]*|#{Tokenizer::ALLOW_FOR_EXACT_SEARCH})]+/o)
                     else
                       s_token.split(/[^[:alnum:]*]+/)
@@ -86,10 +86,10 @@ module RedminePostgresqlSearch
     def get_value_for_fields(fields)
       Array(fields).map do |f|
         normalize_string(
-          if f.respond_to?(:call)
+          if f.respond_to? :call
             @record.instance_exec(&f)
           else
-            @record.send(f)
+            @record.send f
           end
         )
       end.join ' '

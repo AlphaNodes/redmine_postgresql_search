@@ -8,12 +8,12 @@ module RedminePostgresqlSearch
     module Fetcher
       # override the original initialize for different token parsing:
       # allow any number of tokens of any length
-      def initialize(question, user, scope, projects, options = {})
+      def initialize(question, user, scope, projects, **options)
         super
-        @tokens, @force_regular_search = Tokenizer.build_tokens(@question)
+        @tokens, @force_regular_search = Tokenizer.build_tokens @question
         return if @tokens.blank? # nothing to do
 
-        @query_builder = QueryBuilder.new(@tokens, @options)
+        @query_builder = QueryBuilder.new @tokens, @options
       end
 
       def load_result_ids
@@ -27,8 +27,8 @@ module RedminePostgresqlSearch
 
         @scope.each do |scope|
           klass = scope.singularize.camelcase.constantize
-          unless klass.respond_to?(:search_queries)
-            Rails.logger.info("PostgreSQL search not configured for class #{klass.name}")
+          unless klass.respond_to? :search_queries
+            Rails.logger.info "PostgreSQL search not configured for class #{klass.name}"
             @scopes_without_postgresql_search << scope
             next
           end
@@ -39,8 +39,8 @@ module RedminePostgresqlSearch
 
         pg_matches =
           if queries_with_scope.present?
-            sql = @query_builder.search_sql(queries_with_scope, scope_options)
-            result = ActiveRecord::Base.connection.execute(sql)
+            sql = @query_builder.search_sql queries_with_scope, scope_options
+            result = ActiveRecord::Base.connection.execute sql
             # with Redmine 3, id is returned as a string
             # with Redmine 4, an int is returned
             result.each_row.map { |scope, id| [scope, id.to_i] }

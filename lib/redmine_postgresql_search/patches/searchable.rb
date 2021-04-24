@@ -12,7 +12,7 @@ module RedminePostgresqlSearch
             end
           end
         rescue StandardError => e
-          logger.error("rebuild index failed for searchable type #{name}")
+          logger.error "rebuild index failed for searchable type #{name}"
           raise e
         end
 
@@ -21,15 +21,15 @@ module RedminePostgresqlSearch
             group.each(&:update_fulltext_index)
           end
         rescue StandardError => e
-          logger.error("update index failed for searchable type #{name}")
+          logger.error "update index failed for searchable type #{name}"
           raise e
         end
 
         # Build search queries for searchable type.
         # Can return multiple queries when journals, attachments and custom fields are searched, too.
         # The queries expect a CTE called 'fts' which returns a searchable_type and a searchable_id.
-        def search_queries(_tokens, user = User.current, projects = nil, options = {})
-          projects = [] << projects if projects.is_a?(Project)
+        def search_queries(_tokens, user = User.current, projects = nil, **options)
+          projects = [] << projects if projects.is_a? Project
           r = []
           limit = options[:limit]
 
@@ -42,18 +42,18 @@ module RedminePostgresqlSearch
               searchable_custom_fields = CustomField.where(type: "#{name}CustomField", searchable: true).to_a
               if searchable_custom_fields.any?
                 fields_by_visibility = searchable_custom_fields.group_by do |field|
-                  field.visibility_by_project_condition(searchable_options[:project_key], user, "#{CustomValue.table_name}.custom_field_id")
+                  field.visibility_by_project_condition searchable_options[:project_key], user, "#{CustomValue.table_name}.custom_field_id"
                 end
                 clauses = []
                 fields_by_visibility.each do |visibility, fields|
                   clauses << "(#{CustomValue.table_name}.custom_field_id IN (#{fields.map(&:id).join(',')}) AND (#{visibility}))"
                 end
-                visibility = clauses.join(' OR ')
+                visibility = clauses.join ' OR '
                 r << search_scope(user, projects, options)
                      .joins(:custom_values)
                      .joins(cte_join_cond(CustomValue))
                      .where(visibility)
-                limit(limit)
+                limit limit
               end
             end
 
@@ -61,7 +61,7 @@ module RedminePostgresqlSearch
               r << search_scope(user, projects, options)
                    .joins(:journals)
                    .joins(cte_join_cond(Journal))
-                   .where("#{Journal.table_name}.private_notes = ? OR (#{Project.allowed_to_condition(user, :view_private_notes)})", false)
+                   .where("#{Journal.table_name}.private_notes = ? OR (#{Project.allowed_to_condition user, :view_private_notes})", false)
                    .limit(limit)
             end
           end
@@ -89,7 +89,7 @@ module RedminePostgresqlSearch
           return unless add_to_index?
 
           unless (fulltext_index.present? && fulltext_index.destroyed?) || fulltext_index.present?
-            self.fulltext_index = FulltextIndex.create(searchable: self)
+            self.fulltext_index = FulltextIndex.create searchable: self
           end
           fulltext_index.update_index!
         end
